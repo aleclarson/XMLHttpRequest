@@ -9,5 +9,14 @@
   "license": "MIT",
   "engines": {
     "node": ">=0.4.0"
+  },
+  "lotus": {
+    "implicitDependencies": [
+      "child_process",
+      "fs",
+      "http",
+      "https",
+      "url"
+    ]
   }
 }
