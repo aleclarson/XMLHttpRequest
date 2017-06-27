@@ -220,15 +220,18 @@ module.exports = function XMLHttpRequest() {
     if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
       return "";
     }
-    var result = "";
 
-    for (var i in response.headers) {
-      // Cookie headers are excluded
-      if (i !== "set-cookie" && i !== "set-cookie2") {
-        result += i + ": " + response.headers[i] + "\r\n";
-      }
+    var headers = Object.keys(response.headers);
+
+    if (!this.withCredentials) {
+      headers = headers.filter(function(header) {
+        return header !== "set-cookie";
+      });
     }
-    return result.substr(0, result.length - 2);
+
+    return headers.map(function(header) {
+      return header + ": " + response.headers[header];
+    }).join("\r\n");
   };
 
   /**
