@@ -34,6 +34,7 @@ module.exports = function XMLHttpRequest() {
 
   // These headers are not user setable.
   // The following are allowed but banned in the spec:
+  // * cookie
   // * user-agent
   var forbiddenRequestHeaders = [
     "accept-charset",
@@ -43,8 +44,6 @@ module.exports = function XMLHttpRequest() {
     "connection",
     "content-length",
     "content-transfer-encoding",
-    "cookie",
-    "cookie2",
     "date",
     "expect",
     "host",
@@ -218,18 +217,24 @@ module.exports = function XMLHttpRequest() {
    * @return string A string with all response headers separated by CR+LF
    */
   this.getAllResponseHeaders = function() {
-    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
+    if (this.readyState < this.HEADERS_RECEIVED) {
+      return null;
+    }
+    if (errorFlag) {
       return "";
     }
-    var result = "";
 
-    for (var i in response.headers) {
-      // Cookie headers are excluded
-      if (i !== "set-cookie" && i !== "set-cookie2") {
-        result += i + ": " + response.headers[i] + "\r\n";
-      }
+    var headers = Object.keys(response.headers);
+
+    if (!this.withCredentials) {
+      headers = headers.filter(function(header) {
+        return header !== "set-cookie";
+      });
     }
-    return result.substr(0, result.length - 2);
+
+    return headers.map(function(header) {
+      return header + ": " + response.headers[header];
+    }).join("\r\n");
   };
 
   /**
@@ -350,7 +355,7 @@ module.exports = function XMLHttpRequest() {
       headers["Content-Length"] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data);
 
       if (!headers["Content-Type"]) {
-        headers["Content-Type"] = "text/plain;charset=UTF-8";
+        headers["Content-Type"] = "text/plain; charset=UTF-8";
       }
     } else if (settings.method === "POST") {
       // For a post with no data set Content-Length: 0.

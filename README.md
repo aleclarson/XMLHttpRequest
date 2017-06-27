@@ -1,5 +1,5 @@
 
-# XMLHttpRequest v1.8.0
+# XMLHttpRequest v1.8.1
 
 A NodeJS polyfill to emulate the `XMLHttpRequest` class in [React Native](http://www.github.com/facebook/react-native).
 
