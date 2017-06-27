@@ -217,7 +217,10 @@ module.exports = function XMLHttpRequest() {
    * @return string A string with all response headers separated by CR+LF
    */
   this.getAllResponseHeaders = function() {
-    if (this.readyState < this.HEADERS_RECEIVED || errorFlag) {
+    if (this.readyState < this.HEADERS_RECEIVED) {
+      return null;
+    }
+    if (errorFlag) {
       return "";
     }
 
