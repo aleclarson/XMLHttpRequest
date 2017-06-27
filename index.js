@@ -355,7 +355,7 @@ module.exports = function XMLHttpRequest() {
       headers["Content-Length"] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data);
 
       if (!headers["Content-Type"]) {
-        headers["Content-Type"] = "text/plain;charset=UTF-8";
+        headers["Content-Type"] = "text/plain; charset=UTF-8";
       }
     } else if (settings.method === "POST") {
       // For a post with no data set Content-Length: 0.
