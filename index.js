@@ -34,6 +34,7 @@ module.exports = function XMLHttpRequest() {
 
   // These headers are not user setable.
   // The following are allowed but banned in the spec:
+  // * cookie
   // * user-agent
   var forbiddenRequestHeaders = [
     "accept-charset",
@@ -43,8 +44,6 @@ module.exports = function XMLHttpRequest() {
     "connection",
     "content-length",
     "content-transfer-encoding",
-    "cookie",
-    "cookie2",
     "date",
     "expect",
     "host",
